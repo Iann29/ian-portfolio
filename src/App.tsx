@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Code2, User, Mail, Github, Linkedin, FileText, ChevronDown } from 'lucide-react';
 import { useTextScramble } from './hooks/useTextScramble';
 import Lenis from '@studio-freight/lenis';
-import RainEffect from './components/RainEffect';
+import HeroEffects from './components/HeroEffects';
 import LoadingScreen from './components/LoadingScreen';
-import MountainLight from './components/MountainLight';
-import ThunderEffect from './components/ThunderEffect';
 import './fonts.css';
 
 function App() {
@@ -60,11 +58,9 @@ function App() {
             backgroundRepeat: 'no-repeat',
           }}
         >
-          <RainEffect />
-          <MountainLight />
-          <ThunderEffect />
-          <div className="relative z-10">
-            <pre className="text-xs sm:text-sm md:text-base lg:text-lg whitespace-pre hidden md:block">
+          <HeroEffects />
+          <div className="relative z-10 flex flex-col items-center">
+            <pre className="text-xs sm:text-sm md:text-base lg:text-lg whitespace-pre hidden md:block mb-8">
 {`
      ██╗██╗   ██╗███████╗████████╗    ██████╗ ██╗   ██╗██╗██╗     ██████╗ 
      ██║██║   ██║██╔════╝╚══██╔══╝    ██╔══██╗██║   ██║██║██║     ██╔══██╗
@@ -74,11 +70,18 @@ function App() {
  ╚════╝  ╚═════╝ ╚══════╝   ╚═╝       ╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═════╝ 
 `}
             </pre>
-            <h1 className="text-4xl md:text-6xl font-bold mt-8 mb-4" style={{ fontFamily: 'VeniceClassic' }}>{scrambledTitle}</h1>
-            <p className="text-lg md:text-xl text-gray-400 max-w-lg text-center mb-8">
-              "Faço acontecer. É sobre resolver problemas, não sobre código."
-            </p>
-            <div className="flex gap-4 mt-4">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center" style={{ fontFamily: 'VeniceClassic' }}>{scrambledTitle}</h1>
+            <div className="w-full max-w-lg mx-auto px-4">
+              <p className="text-lg md:text-xl text-white text-center mb-8 font-light tracking-wide" style={{
+                textShadow: '0 0 10px rgba(255,255,255,0.5)',
+                background: 'linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.8))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                "Faço acontecer. É sobre resolver problemas, não sobre código."
+              </p>
+            </div>
+            <div className="flex gap-4 mt-4 justify-center">
               <a href="#about" className="hover:text-gray-400 transition-colors">
                 <User size={24} />
               </a>
@@ -108,15 +111,14 @@ function App() {
             <pre className="text-xs sm:text-sm whitespace-pre-wrap mb-8">
 {`
 /**
- * Empresário e desenvolvedor por paixão.
+ * Empresário e desenvolvedor.
  * 
- * Minha stack? Tudo que resolver o problema.
- * Minha metodologia? Funciona? É bom? Tá valendo.
+ * Minha stack: Tudo que resolver o problema.
+ * Minha metodologia: Funciona? É bom? Tá valendo.
  * 
  * Aqui você encontra alguns dos meus experimentos
  * e projetos malucos que faço nas horas vagas.
  * 
- * Bora trocar uma ideia? 
  */
 `}
             </pre>
