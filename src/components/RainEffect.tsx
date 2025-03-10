@@ -5,6 +5,7 @@ interface RainDrop {
   y: number;
   length: number;
   speed: number;
+  width: number;
 }
 
 const RainEffect: React.FC = () => {
@@ -14,48 +15,63 @@ const RainEffect: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    // Set canvas size to match window size
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      // Habilita a pixelização
+      ctx.imageSmoothingEnabled = false;
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Initialize rain drops
     const raindrops: RainDrop[] = [];
-    const numberOfDrops = 150; // Reduced number of drops
+    const numberOfDrops = 100;
 
     for (let i = 0; i < numberOfDrops; i++) {
       raindrops.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        length: Math.random() * 15 + 8, // Slightly shorter drops
-        speed: Math.random() * 3 + 2, // Much slower speed (was 10 + 15)
+        length: Math.random() * 12 + 6,
+        speed: Math.random() * 2 + 1,
+        width: Math.floor(Math.random() * 2) + 1 // Largura variável para mais pixelização
       });
     }
 
-    // Animation function
+    const drawPixelatedLine = (
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      length: number,
+      width: number
+    ) => {
+      const pixelSize = 2; // Tamanho do pixel
+      const steps = Math.floor(length / pixelSize);
+      
+      for (let i = 0; i < steps; i++) {
+        const opacity = 1 - (i / steps) * 0.7; // Fade out gradual
+        ctx.fillStyle = `rgba(174, 194, 224, ${opacity})`;
+        ctx.fillRect(
+          Math.floor(x / pixelSize) * pixelSize,
+          Math.floor((y + i * pixelSize) / pixelSize) * pixelSize,
+          width * pixelSize,
+          pixelSize
+        );
+      }
+    };
+
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Reduced trail effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = 'rgba(174, 194, 224, 0.3)'; // More transparent drops
-      ctx.lineWidth = 1;
-      ctx.lineCap = 'round';
-
       raindrops.forEach((drop) => {
-        ctx.beginPath();
-        ctx.moveTo(drop.x, drop.y);
-        ctx.lineTo(drop.x + drop.length, drop.y + drop.length);
-        ctx.stroke();
+        drawPixelatedLine(ctx, drop.x, drop.y, drop.length, drop.width);
 
-        drop.x += drop.speed;
-        drop.y += drop.speed;
+        drop.y += drop.speed * 2;
+        drop.x += drop.speed * 0.5; // Adiciona movimento diagonal
 
         if (drop.y > canvas.height) {
           drop.y = -drop.length;
@@ -81,7 +97,10 @@ const RainEffect: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="absolute top-0 left-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.6 }} // Slightly reduced overall opacity
+      style={{ 
+        opacity: 0.6,
+        imageRendering: 'pixelated' // Força renderização pixelada
+      }}
     />
   );
 };

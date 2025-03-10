@@ -6,7 +6,7 @@ const LoadingScreen: React.FC<{ onLoadingComplete: () => void }> = ({ onLoadingC
 
   useEffect(() => {
     // Start the expansion animation
-    setScale(1);
+    setScale(100);
 
     // After expansion, start fade out
     const fadeTimeout = setTimeout(() => {
@@ -26,27 +26,18 @@ const LoadingScreen: React.FC<{ onLoadingComplete: () => void }> = ({ onLoadingC
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-50 bg-black pointer-events-none"
       style={{
         opacity,
         transition: 'opacity 0.5s ease-out',
       }}
     >
       <div 
-        className="w-4 h-4 bg-white rounded-full"
+        className="absolute inset-0 bg-white"
         style={{
           transform: `scale(${scale})`,
           transition: 'transform 1s cubic-bezier(0.85, 0, 0.15, 1)',
-          transformOrigin: 'center',
-        }}
-      />
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 70%)',
-          transform: `scale(${scale})`,
-          transition: 'transform 1s cubic-bezier(0.85, 0, 0.15, 1)',
-          transformOrigin: 'center',
+          transformOrigin: 'top',
         }}
       />
     </div>
